@@ -224,7 +224,16 @@ func MeetsQuorum(res CheckpointResult, logKeyID string, witnesses int) (bool, st
 		return false, fmt.Sprintf("the log key %s did not sign this checkpoint", logKeyID)
 	}
 	if cosigners < witnesses {
-		return false, fmt.Sprintf("%d independent signatures, %d required", cosigners, witnesses)
+		return false, fmt.Sprintf("%s, %d required", plural(cosigners, "independent signature"), witnesses)
 	}
 	return true, ""
+}
+
+// plural keeps the output readable. "1 independent signatures" in front of a
+// reviewer is a small thing that costs more credibility than it should.
+func plural(n int, noun string) string {
+	if n == 1 {
+		return fmt.Sprintf("%d %s", n, noun)
+	}
+	return fmt.Sprintf("%d %ss", n, noun)
 }
