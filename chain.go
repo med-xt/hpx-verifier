@@ -1,6 +1,9 @@
 package verify
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // Problem is a named failure. A verifier that returns only a boolean is not
 // useful to a reviewer: the question is never just whether the chain is valid,
