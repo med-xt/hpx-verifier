@@ -1,0 +1,327 @@
+{
+  "about": "RFC 6962 section 2.1.2 consistency proofs. Each case must verify. Each mustFail case must not. Hashes are hex with no prefix; roots carry the sha256: prefix.",
+  "note": "When oldSize is a power of two the old root is itself a node of the new tree and is omitted from the proof. A verifier supplies it. An implementation that does not will fail every power of two case and pass the rest.",
+  "cases": [
+    {
+      "oldSize": 0,
+      "newSize": 1,
+      "oldRoot": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "newRoot": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "proof": []
+    },
+    {
+      "oldSize": 0,
+      "newSize": 8,
+      "oldRoot": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "newRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "proof": []
+    },
+    {
+      "oldSize": 1,
+      "newSize": 1,
+      "oldRoot": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "newRoot": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "proof": []
+    },
+    {
+      "oldSize": 1,
+      "newSize": 2,
+      "oldRoot": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "newRoot": "sha256:6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974",
+      "proof": [
+        "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+      ]
+    },
+    {
+      "oldSize": 1,
+      "newSize": 8,
+      "oldRoot": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "newRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "proof": [
+        "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510",
+        "cfcd0870e97f96e7e5ee0b46b62961302bd65e563e6baa5fa657dbc522208fc6",
+        "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+      ]
+    },
+    {
+      "oldSize": 2,
+      "newSize": 3,
+      "oldRoot": "sha256:6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974",
+      "newRoot": "sha256:4ad8b4ed37ae28c796e12204932428dc8133405657264b0c3c7c15397482946b",
+      "proof": [
+        "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+      ]
+    },
+    {
+      "oldSize": 3,
+      "newSize": 4,
+      "oldRoot": "sha256:4ad8b4ed37ae28c796e12204932428dc8133405657264b0c3c7c15397482946b",
+      "newRoot": "sha256:e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5",
+      "proof": [
+        "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4",
+        "558f76e301e0318a6d22b1b32e16f3f34da2246f1fabdb8b1009b8f8d06d1ba2",
+        "6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974"
+      ]
+    },
+    {
+      "oldSize": 4,
+      "newSize": 7,
+      "oldRoot": "sha256:e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5",
+      "newRoot": "sha256:d0522effecd5c7e1201b214ba61b20e24ffa54f029cc9f8180e4c24eb28b169c",
+      "proof": [
+        "1fca0af52be4fdbdf6da4af615f51e7e57cb86a575607d55982cb4bc7cabb061"
+      ]
+    },
+    {
+      "oldSize": 4,
+      "newSize": 8,
+      "oldRoot": "sha256:e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5",
+      "newRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "proof": [
+        "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+      ]
+    },
+    {
+      "oldSize": 7,
+      "newSize": 8,
+      "oldRoot": "sha256:d0522effecd5c7e1201b214ba61b20e24ffa54f029cc9f8180e4c24eb28b169c",
+      "newRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "proof": [
+        "b81dc7d2d6903091fd74b185e3d31a994d9f58eeff69926b6c250211733ddc74",
+        "6be966aaa92082f3ef5c03d44bbc58bfb1b6635efea1305aea4fc98d03aaca96",
+        "7c7b0305517006efa7619975d446e5aff8eea88098e3cd39da7e4e5610545e4a",
+        "e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5"
+      ]
+    },
+    {
+      "oldSize": 8,
+      "newSize": 9,
+      "oldRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "newRoot": "sha256:f182088e4039022c4de119da6e27f6e995d4ade1a7db2442a067767a8affca79",
+      "proof": [
+        "ce1562c6e438873b65fb65c9c6569bf58960b61f8e151f2436f9f5711778e010"
+      ]
+    },
+    {
+      "oldSize": 5,
+      "newSize": 11,
+      "oldRoot": "sha256:70eb3c7704813e7a323d9c7fcef63a55f56e0084b8b8b2582ce65b402ec1f513",
+      "newRoot": "sha256:cb6634d3912d15ba9a2c6048b94d57bacf54cdbc068b6b33e50b6d86d827a509",
+      "proof": [
+        "2d4b8f6b624e79007559f33342d3ce3965a28cf5f606342d9dec9b521acefbf0",
+        "d9772c879df2559eb8e0b3bb57914e89945ec019831d388e861402117c1ba9b6",
+        "9a5282c20cebbf187b9e431c05663a3ebf9f4a8c8a5702c69a760f4f2a20bc27",
+        "e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5",
+        "db9f0aceec381f13d705b6044eb41c0f14f53f08d486ebf72a9de64a9ef9e37b"
+      ]
+    },
+    {
+      "oldSize": 6,
+      "newSize": 13,
+      "oldRoot": "sha256:609dd4bf127ef19522ecd9422225307abf45822d47a89c62ecd2e48764769261",
+      "newRoot": "sha256:5410e107f7bf25bf97a93a8738ae0bfb3bc3b599109bbbb58d668b29a7dfbe2b",
+      "proof": [
+        "7c7b0305517006efa7619975d446e5aff8eea88098e3cd39da7e4e5610545e4a",
+        "9a5282c20cebbf187b9e431c05663a3ebf9f4a8c8a5702c69a760f4f2a20bc27",
+        "e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5",
+        "03162ae2b9bd9b5da1fcdb68f72de5a02e2103d35b73b0d9715f1e1db17c0e7b"
+      ]
+    },
+    {
+      "oldSize": 8,
+      "newSize": 16,
+      "oldRoot": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "newRoot": "sha256:938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+      "proof": [
+        "a0d9a9b05678279003b8ba2f840c7673be0c41583f2173aa9a7337031722855c"
+      ]
+    },
+    {
+      "oldSize": 9,
+      "newSize": 16,
+      "oldRoot": "sha256:f182088e4039022c4de119da6e27f6e995d4ade1a7db2442a067767a8affca79",
+      "newRoot": "sha256:938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+      "proof": [
+        "ce1562c6e438873b65fb65c9c6569bf58960b61f8e151f2436f9f5711778e010",
+        "c176ba6eb6c0596939451ee8fa6d325484e8972c9f2cb110fddf39c69ed70414",
+        "1e54a220aedabe915da5d92dcc2574a16545b0f45860138d8c2813d11fc55d35",
+        "8d3bfc6798c0971e927fba74cbd3b8d213fc48c9d04aee62df8dfbbee2b2b066",
+        "fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7"
+      ]
+    },
+    {
+      "oldSize": 15,
+      "newSize": 16,
+      "oldRoot": "sha256:91de8d2a7285a093ce2578e0d204b65f4c960a73068dc64b67b9ad0527844b6d",
+      "newRoot": "sha256:938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+      "proof": [
+        "88400897745598f1ce3c35cc952c53e821213e3cdd01b49f3dab149154c47d81",
+        "ec15f13ca90ce842e2a2c5b40dd10e239cfa6f8b2e53010d4c38707f42b30fe0",
+        "69683e264d1d0291aaf7ccf9b22994993f56c74850ddeb5add0460cbd00b8d22",
+        "595eafd92a030c370a083b285795f400eac6fe18acccf5188b3d3cf215f9a673",
+        "fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7"
+      ]
+    },
+    {
+      "oldSize": 16,
+      "newSize": 17,
+      "oldRoot": "sha256:938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+      "newRoot": "sha256:040d1bee4dc6fae5a932e03fda6af0bf149e860ae0b013019ae5b6bb5cfa19b6",
+      "proof": [
+        "36037f6b340a18411cf97a276107e37c56f69565ecfb5d805352ad8c1ab86dd3"
+      ]
+    },
+    {
+      "oldSize": 21,
+      "newSize": 40,
+      "oldRoot": "sha256:073f37a6e7120f2df38d4b3c6758405e29a6ba1757574d4f923ca46f535514d4",
+      "newRoot": "sha256:6c0d671ab540b7b1d15f01449aed4f39e01bb13997182b3ba3a6e5fcbb5002fc",
+      "proof": [
+        "74d361eb0c0fb945a678cb8c7c04b210ff4894949a270316e2bb67fc2113501e",
+        "3b2ab060b6c105f94ff0e1a36279b84019be6397a9c1ce2ddfd3f5ee961252f3",
+        "ef1e42ab205e355c5db85d52783038faf01a230ecd8506261ac15b7596b179c1",
+        "ca5a81026dcacbe98be1910876cbe480758836f7c2eacd79a92906cd2df01040",
+        "f30fc9d0bedb8c731921cd810632d791f82d890ee5b4330363f921e68684e428",
+        "938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+        "27b516fa5a882b6457d5850cfc0d7dfcc3c48cb8a187a6e87e424595682cc545"
+      ]
+    },
+    {
+      "oldSize": 1000,
+      "newSize": 1024,
+      "oldRoot": "sha256:b4a09ff50f57886f64c1e757ed48d1199a137a24803b882055eaf340deedaf4a",
+      "newRoot": "sha256:ac94b4b550580d0177527562155203523d355e32110584929913c3bf28d6fc73",
+      "proof": [
+        "cf13c3af19b61722c6d40e0958902d73cff5ec8669052ad873b9f1d963eb108a",
+        "85cd8adf5ec8513fde8a3834e0ff65396f77652a4751c125159d1167568184d3",
+        "8c1930d5ed529f92fce8b9040152d6999bcc04b3a01729d9417ac9f142a805fb",
+        "e049ceef07ac66645b9b2ac1c7a22e2200003e154fe5f30968eaeae2ffa252ce",
+        "752e565efc1279a3707d804f363fe2d6e8df566a06cd14c906320119a3f98193",
+        "766d013618e0bcb8152de461d5c9d53fea72c492e41e95d0167f73073a6087a4",
+        "68cf848110c4f22fa7452d3301bd17c1996e537a72c61a775c1fffd302f23cc4",
+        "4a8c9cccea23cb6d3a16a7be48ace8251cde9fd8b6f7c960c591b194138982cf"
+      ]
+    },
+    {
+      "oldSize": 1024,
+      "newSize": 1025,
+      "oldRoot": "sha256:ac94b4b550580d0177527562155203523d355e32110584929913c3bf28d6fc73",
+      "newRoot": "sha256:ab35b8e6fa1d36ad74fdfe9098a1c9b4487171a40cb5db5081809cc463cc0a22",
+      "proof": [
+        "a707a9c398f0a4995fbf073dba6b36c38d3f8821519feb6def823e36e1773638"
+      ]
+    },
+    {
+      "oldSize": 74219,
+      "newSize": 100000,
+      "oldRoot": "sha256:f4bb3cedd955447dff4f90d308a4e37e44830e84cf6886d84de81fb3b2860f7e",
+      "newRoot": "sha256:f39f59c249085a1207a549cc9894e51d0d4386501de3bfac1a7f52184bd8601e",
+      "proof": [
+        "e47386045e790bb6b8c8e80791e145883dabc3d25f846c2f590dbc8bffcdce68",
+        "17f3e11b3bb31c75f5b182e1c1bd8c132a984f72f6652cc991fc58d3c6c66e24",
+        "77ea42abb2b709e2e8acca1de111aa64137528ff5c565e1f56ef7bec316daded",
+        "f83038050079add1658cfbd1533014bfecf53fb6feddb1bd670d0b4cb1bf466b",
+        "a2dbcaf2fd5fdc74f94d0f9fab5158824f24e26def213e7aeae2ec0d6d7dca71",
+        "42e2a5a4ab3c929ffb90409449c14d9ab16233cc70b4bc0bee240dd70e803b6a",
+        "4f9c0f9e792fa268bcc682633fc69ad83a2aa3808f550f8a882a6d398f0a67aa",
+        "4edf3a836a6dac800a6105c559c8599ed8a831081395e77020333915efd50df1",
+        "0f1a31ffc352b4944e58090406842299e283630e1da1c6964e5b86b7a8a88658",
+        "378ca6efde71bf4cd96ecb8d1fc52a740f8ee9a1844d62f10552de13e078fe26",
+        "af691beaf0205c9fa845e9bebb0396b27a6627db569f7bc72457b475bbf6b439",
+        "00cb6db9c529c3b30ba507de2984dadb6fe37cff851d4dd1adf06b58bdf4e2f0",
+        "ba9a6fe54161ccfcdfc6565c85a6483d125399f822a55c01bc9e59ea7ec3ee7d",
+        "b227710d633ee25cef2e3be1837115e6608eb76f87bd7a8f893bc3ad8a39d840",
+        "0570468268a7fa413cb0850618c0fc4abd2b9a97502a3ca5ffd9074be9edb795",
+        "d13ad522d469ec426270c366c33fa57b8bb6e65864ff58951bbc846cdedb0c1f",
+        "f9880339b8e0a7ed534a8e06deeab945e5b693ec8a5c7f562855e93973a1b145",
+        "2eaa36f147c1d8630b941cb031d65185fae63de8b3397c715764480489b39861"
+      ]
+    }
+  ],
+  "mustFail": [
+    {
+      "about": "The log was rebuilt with one leaf altered. The proof is well formed for the rebuilt tree and does not reconstruct the root that was signed.",
+      "oldSize": 20,
+      "newSize": 40,
+      "oldRoot": "sha256:9112a80d91a44787e29e6c2de790676aef375e2d550671379008b7185d7dca69",
+      "newRoot": "sha256:71895f9d37b1964168a2c644687e8e507bf728ed2175c05e71c46a7b1984866f",
+      "proof": [
+        "ca5a81026dcacbe98be1910876cbe480758836f7c2eacd79a92906cd2df01040",
+        "11c930e6b5e6217bda3d49a34ad5de0258d2bdf28a3aa8bfe1925b4df326309d",
+        "f30fc9d0bedb8c731921cd810632d791f82d890ee5b4330363f921e68684e428",
+        "26ddd8c030bf41be91b11f9de9bb20ffaff7cb823dbcfbc0af46df9fb13ab59c",
+        "27b516fa5a882b6457d5850cfc0d7dfcc3c48cb8a187a6e87e424595682cc545"
+      ]
+    },
+    {
+      "about": "A leaf was removed. The tree is one shorter and shares no history with the signed root.",
+      "oldSize": 20,
+      "newSize": 39,
+      "oldRoot": "sha256:9112a80d91a44787e29e6c2de790676aef375e2d550671379008b7185d7dca69",
+      "newRoot": "sha256:2408a443b3e5033ceb5c5dc16ee3375b004e36ebcc7a0f20175f1e0ebf328eac",
+      "proof": [
+        "62c1f2e9c1fde4834b0d1cfc7bf2424b548aa75c28c5c3c21e71e7e96b46215c",
+        "fcb71201f7220666af5343b7b188a1521acf40e9ec2deeaa07cf82b3337a3c6e",
+        "cbeeddc3919d3f2b84c133efa7f446e3d158fe5a4563d76e6e00f5aeffc34386",
+        "e7067f3d5076277d302b99f69f5e02929475d11e5ab76d20b90d378822e27eda",
+        "121eed1ff8e014876866ba69234ffab704d3593e7c73dbb1288fdeb469140086"
+      ]
+    },
+    {
+      "about": "The log reports fewer records than it was already signed for.",
+      "oldSize": 30,
+      "newSize": 20,
+      "oldRoot": "sha256:d11807b615684bcfae53beceed36f540b21f5c877bcbafad0909b584ec7efb1a",
+      "newRoot": "sha256:9112a80d91a44787e29e6c2de790676aef375e2d550671379008b7185d7dca69",
+      "proof": []
+    },
+    {
+      "about": "Two different roots at one size. No proof can reconcile them.",
+      "oldSize": 40,
+      "newSize": 40,
+      "oldRoot": "sha256:6c0d671ab540b7b1d15f01449aed4f39e01bb13997182b3ba3a6e5fcbb5002fc",
+      "newRoot": "sha256:71895f9d37b1964168a2c644687e8e507bf728ed2175c05e71c46a7b1984866f",
+      "proof": []
+    },
+    {
+      "about": "The tree grew and the proof is empty.",
+      "oldSize": 21,
+      "newSize": 40,
+      "oldRoot": "sha256:073f37a6e7120f2df38d4b3c6758405e29a6ba1757574d4f923ca46f535514d4",
+      "newRoot": "sha256:6c0d671ab540b7b1d15f01449aed4f39e01bb13997182b3ba3a6e5fcbb5002fc",
+      "proof": []
+    },
+    {
+      "about": "A step has been removed from an otherwise valid proof.",
+      "oldSize": 21,
+      "newSize": 40,
+      "oldRoot": "sha256:073f37a6e7120f2df38d4b3c6758405e29a6ba1757574d4f923ca46f535514d4",
+      "newRoot": "sha256:6c0d671ab540b7b1d15f01449aed4f39e01bb13997182b3ba3a6e5fcbb5002fc",
+      "proof": [
+        "3b2ab060b6c105f94ff0e1a36279b84019be6397a9c1ce2ddfd3f5ee961252f3",
+        "ef1e42ab205e355c5db85d52783038faf01a230ecd8506261ac15b7596b179c1",
+        "ca5a81026dcacbe98be1910876cbe480758836f7c2eacd79a92906cd2df01040",
+        "f30fc9d0bedb8c731921cd810632d791f82d890ee5b4330363f921e68684e428",
+        "938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+        "27b516fa5a882b6457d5850cfc0d7dfcc3c48cb8a187a6e87e424595682cc545"
+      ]
+    },
+    {
+      "about": "A step has been added to an otherwise valid proof.",
+      "oldSize": 21,
+      "newSize": 40,
+      "oldRoot": "sha256:073f37a6e7120f2df38d4b3c6758405e29a6ba1757574d4f923ca46f535514d4",
+      "newRoot": "sha256:6c0d671ab540b7b1d15f01449aed4f39e01bb13997182b3ba3a6e5fcbb5002fc",
+      "proof": [
+        "74d361eb0c0fb945a678cb8c7c04b210ff4894949a270316e2bb67fc2113501e",
+        "3b2ab060b6c105f94ff0e1a36279b84019be6397a9c1ce2ddfd3f5ee961252f3",
+        "ef1e42ab205e355c5db85d52783038faf01a230ecd8506261ac15b7596b179c1",
+        "ca5a81026dcacbe98be1910876cbe480758836f7c2eacd79a92906cd2df01040",
+        "f30fc9d0bedb8c731921cd810632d791f82d890ee5b4330363f921e68684e428",
+        "938f9bd3647d965528b6f586a7d2e4a5a11793f378e11df597fddeb91224bbd1",
+        "27b516fa5a882b6457d5850cfc0d7dfcc3c48cb8a187a6e87e424595682cc545",
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      ]
+    }
+  ]
+}

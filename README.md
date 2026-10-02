@@ -77,6 +77,50 @@ inclusion proofs:
 
 It does all of this with no network access and no dependency on any service.
 
+## The check that is about the operator, not the record
+
+Everything above establishes that a record cannot be altered by anyone who does
+not hold a signing key. It says nothing about the party who runs the log, and
+that is the question worth asking. With full database access: stop the service,
+remove a record, rebuild the Merkle tree, start again. Every remaining signature
+verifies. Every chain links. Every inclusion proof resolves against the new
+root. The removed record simply never existed.
+
+A **checkpoint** closes it. Five lines of signed text saying that at one moment
+the log held this many records and its root was this.
+
+```
+hpx/checkpoint/1
+medxt-evidence/us-east-1
+20
+sha256:5f2c…
+2026-10-06T09:00:00.000Z
+
+sig k-log-001 1 ML-DSA-65 …
+sig k-wit-001 1 ML-DSA-65 …
+```
+
+The second signature is the one that matters. It belongs to a party that is not
+the operator, keeps its own copy of what it last endorsed, and will only sign a
+new checkpoint after verifying a **consistency proof** that the tree now
+contains the tree then as an unchanged prefix. A log that has been rebuilt
+cannot produce that proof, and the failure to produce it is the detection.
+
+This verifier implements both, and the asymmetry is the point: a reviewer
+holding two checkpoints and a proof needs nothing from the operator at all.
+
+```
+go test -run Consistency ./...
+go test -run Checkpoint ./...
+```
+
+Two honest limits, stated here rather than buried. A checkpoint signed only by
+the log proves nothing against the log, so this tool reports which keys signed
+and leaves the quorum rule to whoever is relying on it. And a witness operated
+by the same party as the log provides nothing whatsoever; the value is entirely
+in independence, which is an agreement between organisations and not a property
+any code can establish.
+
 ## What it detects and names
 
 - Any field altered in any record
@@ -87,8 +131,18 @@ It does all of this with no network access and no dependency on any service.
 - A record signed by a key retired before the claimed time
 - A leaf presented as an interior node in an inclusion proof
 - A forged digest presented with a valid proof for a different record
+- A log reporting fewer records than a checkpoint it has already signed
+- Two checkpoints at one size carrying different roots
+- A consistency proof that does not reconstruct the earlier signed root, which
+  is what a rebuilt log produces
+- A checkpoint whose root is not the root the inclusion proofs are built on
+- A checkpoint altered after signing, including a changed origin, which is how a
+  checkpoint from one log would be replayed as another's
 
-Each problem names the record by position and the check that failed.
+Each problem names the record by position and the check that failed. A
+consistency failure additionally distinguishes a malformed proof from two roots
+that describe different trees, because the first is a bug and the second is an
+incident.
 
 ## What a valid chain does not establish
 
@@ -140,20 +194,35 @@ go test ./...
 ```
 
 That reproduces every published vector: 31 canonical encoding cases, Merkle
-trees at sizes 0, 1, 2, 3, 7, 8 and 100,000, and a signed six-record episode
-with the eight required failure cases constructed from it.
+trees at sizes 0, 1, 2, 3, 7, 8 and 100,000, a signed six-record episode with
+the eight required failure cases constructed from it, 21 consistency proofs with
+seven cases that must fail, and a signed checkpoint with a witness
+co-signature.
+
+The consistency cases include power of two sizes deliberately. When the earlier
+size is a power of two the old root is a node of the new tree and is omitted
+from the proof, so the verifier has to supply it. An implementation that misses
+that fails every power of two case and passes all the others, which is the
+defect a tidy test set hides.
 
 ## The format
 
 [`spec/record-format.md`](spec/record-format.md) is the normative document.
-Canonical encoding, the Merkle construction and the envelope shape are frozen.
-Changing any of them invalidates every signature ever made under `hpx/1`.
+Canonical encoding, the Merkle construction, the envelope shape and the
+checkpoint body format are frozen. Changing any of the first three invalidates
+every signature ever made under `hpx/1`. Changing the checkpoint body is worse:
+it invalidates every checkpoint anyone else is holding, and those are the copies
+the operator cannot reissue.
 
 ## What is not here
 
 This repository contains a verifier. It does not contain the capture adapters,
-the signing path, or anything that produces records. Those are separate and are
-not published.
+the signing path, the witness implementation, or anything that produces records
+or checkpoints. Those are separate and are not published.
+
+That boundary is deliberate and it does not weaken anything here. Verifying a
+checkpoint needs no part of the thing that made it, which is the same reason
+verifying a record needs no part of the signing path.
 
 ## Licence
 

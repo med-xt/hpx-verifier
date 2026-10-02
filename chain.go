@@ -40,6 +40,12 @@ const (
 	CodePrevUnexpected  = "PREV_UNEXPECTED"
 	CodeInclusionFailed = "INCLUSION_FAILED"
 	CodePHIDetected     = "PHI_DETECTED"
+
+	// Checkpoint level. These are about the log's own history rather than about
+	// any record, which is why they carry no record position.
+	CodeCheckpointInvalid  = "CHECKPOINT_INVALID"
+	CodeCheckpointMismatch = "CHECKPOINT_ROOT_MISMATCH"
+	CodeLogInconsistent    = "LOG_INCONSISTENT"
 )
 
 // VerifyRecord checks everything about one envelope that does not depend on its
@@ -158,6 +164,33 @@ type Bundle struct {
 	Records         []*Envelope      `json:"records"`
 	LogRoot         string           `json:"logRoot"`
 	InclusionProofs []InclusionProof `json:"inclusionProofs"`
+
+	// Optional. A signed statement that the root above was published, which is
+	// the difference between a bundle whose root the reviewer has to take the
+	// operator's word for and one they do not.
+	Checkpoint string `json:"checkpoint"`
+
+	// Optional, and the reason a bundle can be described as sufficient on its
+	// own. A bundle exported for an audit carries the public keys needed to
+	// check it, so a reviewer handed one file is not then asked for a second
+	// one they were never given.
+	Keys json.RawMessage `json:"keys"`
+}
+
+// CheckpointOutcome is reported alongside the result rather than folded into
+// it, because a bundle with no checkpoint is still a valid bundle. The records
+// are genuine; the log's own history is simply not independently established,
+// and collapsing those two states into one boolean loses the distinction that
+// matters most.
+type CheckpointOutcome struct {
+	Present        bool               `json:"present"`
+	Verified       bool               `json:"verified"`
+	MatchesLogRoot bool               `json:"matchesLogRoot"`
+	Origin         string             `json:"origin,omitempty"`
+	Size           int                `json:"size,omitempty"`
+	Time           string             `json:"time,omitempty"`
+	SignedBy       []CheckpointSigner `json:"signedBy,omitempty"`
+	Problems       []string           `json:"problems,omitempty"`
 }
 
 func VerifyBundle(b *Bundle, reg *Registry, sig SignatureVerifier) Result {
@@ -180,4 +213,35 @@ func VerifyBundle(b *Bundle, reg *Registry, sig SignatureVerifier) Result {
 	}
 	res.OK = len(res.Problems) == 0
 	return res
+}
+
+// VerifyBundleCheckpoint checks the checkpoint a bundle carries, if any.
+//
+// Kept as a second call rather than folded into VerifyBundle so the existing
+// signature does not change and so the outcome can be reported separately. The
+// one failure it adds is a checkpoint over a different root: that is not
+// evidence about these records, and letting it pass as though it were is worse
+// than carrying no checkpoint at all.
+func VerifyBundleCheckpoint(b *Bundle, reg *Registry, sig SignatureVerifier) (CheckpointOutcome, []Problem) {
+	if b.Checkpoint == "" {
+		return CheckpointOutcome{}, nil
+	}
+	var problems []Problem
+	res := VerifyCheckpoint(b.Checkpoint, reg, sig)
+	out := CheckpointOutcome{Present: true, Problems: res.Problems, SignedBy: res.SignedBy}
+	if res.Checkpoint != nil {
+		out.Origin = res.Checkpoint.Origin
+		out.Size = res.Checkpoint.Size
+		out.Time = res.Checkpoint.Time
+		out.MatchesLogRoot = res.Checkpoint.Root == b.LogRoot
+		if !out.MatchesLogRoot {
+			problems = append(problems, Problem{-1, "", CodeCheckpointMismatch,
+				fmt.Sprintf("checkpoint is for root %s but the inclusion proofs are built on %s", res.Checkpoint.Root, b.LogRoot)})
+		}
+	}
+	for _, p := range res.Problems {
+		problems = append(problems, Problem{-1, "", CodeCheckpointInvalid, p})
+	}
+	out.Verified = res.OK && out.MatchesLogRoot && len(res.Problems) == 0
+	return out, problems
 }

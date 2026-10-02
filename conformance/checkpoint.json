@@ -1,0 +1,76 @@
+{
+  "about": "Checkpoint bodies. These are the exact bytes a signature covers. body must match, byte for byte, including the trailing newline.",
+  "spec": "hpx/checkpoint/1",
+  "note": "Five lines, each terminated by a newline. No JSON, no key ordering, no number formatting and no escaping, which is why this object does not need a canonicalisation suite of its own.",
+  "cases": [
+    {
+      "fields": {
+        "origin": "medxt-evidence/us-east-1",
+        "size": 0,
+        "root": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "time": "2026-10-01T00:00:00.000Z"
+      },
+      "body": "hpx/checkpoint/1\nmedxt-evidence/us-east-1\n0\nsha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n2026-10-01T00:00:00.000Z\n"
+    },
+    {
+      "fields": {
+        "origin": "medxt-evidence/us-east-1",
+        "size": 1,
+        "root": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "time": "2026-10-01T12:00:00.000Z"
+      },
+      "body": "hpx/checkpoint/1\nmedxt-evidence/us-east-1\n1\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T12:00:00.000Z\n"
+    },
+    {
+      "fields": {
+        "origin": "a-log",
+        "size": 100000,
+        "root": "sha256:abababababababababababababababababababababababababababababababab",
+        "time": "2033-11-28T23:59:59.999Z"
+      },
+      "body": "hpx/checkpoint/1\na-log\n100000\nsha256:abababababababababababababababababababababababababababababababab\n2033-11-28T23:59:59.999Z\n"
+    }
+  ],
+  "mustReject": [
+    {
+      "about": "a size with a leading zero",
+      "body": "hpx/checkpoint/1\na-log\n08\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "a time without milliseconds",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00Z\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "a root that is not sha256",
+      "body": "hpx/checkpoint/1\na-log\n8\nmd5:abc\n2026-10-01T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "an unknown spec",
+      "body": "hpx/checkpoint/2\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "no signature block",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n"
+    },
+    {
+      "about": "carriage returns",
+      "body": "hpx/checkpoint/1\r\na-log\r\n8\r\nsha256:1111111111111111111111111111111111111111111111111111111111111111\r\n2026-10-01T00:00:00.000Z\r\n\r\nsig k-log-001 1 ML-DSA-65 AA==\r\n"
+    },
+    {
+      "about": "a time that matches the pattern and is not a date",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-02-30T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "a blank line inside the signature block",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n\n\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    },
+    {
+      "about": "a signature block that does not end with a newline",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA=="
+    },
+    {
+      "about": "the same key signing twice",
+      "body": "hpx/checkpoint/1\na-log\n8\nsha256:1111111111111111111111111111111111111111111111111111111111111111\n2026-10-01T00:00:00.000Z\n\nsig k-log-001 1 ML-DSA-65 AA==\nsig k-log-001 1 ML-DSA-65 AA==\n"
+    }
+  ]
+}
