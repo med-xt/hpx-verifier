@@ -1,0 +1,493 @@
+{
+  "about": "RFC 6962 Merkle vectors. Leaf is SHA-256(0x00 || ascii digest string). Node is SHA-256(0x01 || left || right). Split for n leaves is 2^ceil(log2(n) - 1). Empty tree is SHA-256 of the empty string.",
+  "emptyTreeRoot": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "trees": [
+    {
+      "size": 0,
+      "root": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proofs": []
+    },
+    {
+      "size": 1,
+      "root": "sha256:bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 1,
+            "path": []
+          }
+        }
+      ]
+    },
+    {
+      "size": 2,
+      "root": "sha256:6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 2,
+            "path": [
+              {
+                "side": "right",
+                "hash": "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+              }
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+          "proof": {
+            "index": 1,
+            "size": 2,
+            "path": [
+              {
+                "side": "left",
+                "hash": "bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "size": 3,
+      "root": "sha256:4ad8b4ed37ae28c796e12204932428dc8133405657264b0c3c7c15397482946b",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 3,
+            "path": [
+              {
+                "side": "right",
+                "hash": "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+              },
+              {
+                "side": "right",
+                "hash": "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+              }
+            ]
+          }
+        },
+        {
+          "index": 1,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000001",
+          "proof": {
+            "index": 1,
+            "size": 3,
+            "path": [
+              {
+                "side": "left",
+                "hash": "bef3be7ba684d64c44d6603f62ef6221f9c25f229f082c6b6f30b1464eeb4d98"
+              },
+              {
+                "side": "right",
+                "hash": "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+              }
+            ]
+          }
+        },
+        {
+          "index": 2,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000002",
+          "proof": {
+            "index": 2,
+            "size": 3,
+            "path": [
+              {
+                "side": "left",
+                "hash": "6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "size": 7,
+      "root": "sha256:d0522effecd5c7e1201b214ba61b20e24ffa54f029cc9f8180e4c24eb28b169c",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 7,
+            "path": [
+              {
+                "side": "right",
+                "hash": "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+              },
+              {
+                "side": "right",
+                "hash": "cfcd0870e97f96e7e5ee0b46b62961302bd65e563e6baa5fa657dbc522208fc6"
+              },
+              {
+                "side": "right",
+                "hash": "1fca0af52be4fdbdf6da4af615f51e7e57cb86a575607d55982cb4bc7cabb061"
+              }
+            ]
+          }
+        },
+        {
+          "index": 3,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+          "proof": {
+            "index": 3,
+            "size": 7,
+            "path": [
+              {
+                "side": "left",
+                "hash": "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+              },
+              {
+                "side": "left",
+                "hash": "6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974"
+              },
+              {
+                "side": "right",
+                "hash": "1fca0af52be4fdbdf6da4af615f51e7e57cb86a575607d55982cb4bc7cabb061"
+              }
+            ]
+          }
+        },
+        {
+          "index": 6,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000006",
+          "proof": {
+            "index": 6,
+            "size": 7,
+            "path": [
+              {
+                "side": "left",
+                "hash": "7c7b0305517006efa7619975d446e5aff8eea88098e3cd39da7e4e5610545e4a"
+              },
+              {
+                "side": "left",
+                "hash": "e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "size": 8,
+      "root": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 8,
+            "path": [
+              {
+                "side": "right",
+                "hash": "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+              },
+              {
+                "side": "right",
+                "hash": "cfcd0870e97f96e7e5ee0b46b62961302bd65e563e6baa5fa657dbc522208fc6"
+              },
+              {
+                "side": "right",
+                "hash": "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+              }
+            ]
+          }
+        },
+        {
+          "index": 3,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000003",
+          "proof": {
+            "index": 3,
+            "size": 8,
+            "path": [
+              {
+                "side": "left",
+                "hash": "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+              },
+              {
+                "side": "left",
+                "hash": "6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974"
+              },
+              {
+                "side": "right",
+                "hash": "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+              }
+            ]
+          }
+        },
+        {
+          "index": 7,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000007",
+          "proof": {
+            "index": 7,
+            "size": 8,
+            "path": [
+              {
+                "side": "left",
+                "hash": "b81dc7d2d6903091fd74b185e3d31a994d9f58eeff69926b6c250211733ddc74"
+              },
+              {
+                "side": "left",
+                "hash": "7c7b0305517006efa7619975d446e5aff8eea88098e3cd39da7e4e5610545e4a"
+              },
+              {
+                "side": "left",
+                "hash": "e1a97364f59935a135bf558bf0478e0a16399f402cd09983ff42712da38ab1f5"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "size": 100000,
+      "root": "sha256:f39f59c249085a1207a549cc9894e51d0d4386501de3bfac1a7f52184bd8601e",
+      "proofs": [
+        {
+          "index": 0,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+          "proof": {
+            "index": 0,
+            "size": 100000,
+            "path": [
+              {
+                "side": "right",
+                "hash": "991f90a24c7c1ddac144b99f7e443f0d73ded70ba78db4062a1e796790dec510"
+              },
+              {
+                "side": "right",
+                "hash": "cfcd0870e97f96e7e5ee0b46b62961302bd65e563e6baa5fa657dbc522208fc6"
+              },
+              {
+                "side": "right",
+                "hash": "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+              },
+              {
+                "side": "right",
+                "hash": "a0d9a9b05678279003b8ba2f840c7673be0c41583f2173aa9a7337031722855c"
+              },
+              {
+                "side": "right",
+                "hash": "de57ada230d56d8fb5e684a2fade922d9749a1ad8669d93ee76b83a02aabc0c8"
+              },
+              {
+                "side": "right",
+                "hash": "121218bb59e161b5b1bc1114a99c0ffacf062a84b8466ff6abfe6ac6e0c27951"
+              },
+              {
+                "side": "right",
+                "hash": "2c533c051e8477d1f13aaf5808c24b58f70eeabd0b9f05c012587f43fa178872"
+              },
+              {
+                "side": "right",
+                "hash": "637aad6800eb840f3dca6d8c3e2e63b3e072ea280ec2bdd86c5785274ac1eed6"
+              },
+              {
+                "side": "right",
+                "hash": "505c93bd84bcb5193b2f597f9c7a981f5fb28ae12d77e4e4aaaa6ea6808ffeec"
+              },
+              {
+                "side": "right",
+                "hash": "aa64fff623063935e1f553c5ee9ca0a0dd33be75ea87e82ab2093d487334db11"
+              },
+              {
+                "side": "right",
+                "hash": "eaf28484fd7c0037d65fb14c81d8f491d142e1d567739ff47f52b2469d8430c1"
+              },
+              {
+                "side": "right",
+                "hash": "9e2ca2aebf2ff3190e77cc777790f95c443a3d45949f2feb0cac739c2e368362"
+              },
+              {
+                "side": "right",
+                "hash": "49e3a159b7b2c6e169f221b2a1ef2505f0584f169095efe54237d7a59bde4a3b"
+              },
+              {
+                "side": "right",
+                "hash": "8e9c52c8f662d2aa7be7747b749e598f9bcda4365037fbef9f2359de75131c02"
+              },
+              {
+                "side": "right",
+                "hash": "31c2978563bd662fd0eaad7f466637f71370e81a270787f8df353b0486732ccc"
+              },
+              {
+                "side": "right",
+                "hash": "4e6e0fcc22391cf27f24c2d0bf856b035832be4edd31682525c45bb55a7358bf"
+              },
+              {
+                "side": "right",
+                "hash": "94aa23d51411e09271a9fadf1e8063fc6b80b6d958cf8bba2fecb4491aebbc5b"
+              }
+            ]
+          }
+        },
+        {
+          "index": 49999,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000049999",
+          "proof": {
+            "index": 49999,
+            "size": 100000,
+            "path": [
+              {
+                "side": "left",
+                "hash": "82e2af7d02db5982253941695f9d0094e4868ab16f929f5ef82acdc09edd7b40"
+              },
+              {
+                "side": "left",
+                "hash": "e898bdff590b97972b511c2285655e0783a4023ec6b8dccf9d96ca9530af1481"
+              },
+              {
+                "side": "left",
+                "hash": "9141eebda622f116b47bc55d29a43018707adde7f4e8058925299c2f778bde37"
+              },
+              {
+                "side": "left",
+                "hash": "f08ef6ed19819da4dac31e574fa225a7dd38b06eaec16dd141b83804b45a77e6"
+              },
+              {
+                "side": "right",
+                "hash": "3b27628551daf9b6840a0dbc941c8720bf7fc6fcbede31dcecab2f94b73849e2"
+              },
+              {
+                "side": "right",
+                "hash": "e65ff879ada4e92d5bfb4a3e7d1b4aa7f2c29aee23038945eb5d7fe185b89cd7"
+              },
+              {
+                "side": "left",
+                "hash": "9db8e40c9c9c2dca11a4fdae11b7b75dde9db8ddc5105a8be32ad9976cf9bbf4"
+              },
+              {
+                "side": "right",
+                "hash": "d1374833407909359e7a6a78a5b5c2be4da5375773e32c9c33717089292a1581"
+              },
+              {
+                "side": "left",
+                "hash": "5d0350357e378c3de8da24b08cfe5ec6f1d418ce26eca8b0a79e0133d722742c"
+              },
+              {
+                "side": "left",
+                "hash": "e932f9bde89287ca2771ffca780d47a35008862f29f6b8ea0a0f364a9bc74509"
+              },
+              {
+                "side": "right",
+                "hash": "15e0acf3510ed0ea72cb222c1b7e4de38881538795943c4ff6c4943596bf5839"
+              },
+              {
+                "side": "right",
+                "hash": "ac5fa226086c2b58f94c745e34965a46af4d05210f1bc6c4d4cba9f480a994b5"
+              },
+              {
+                "side": "right",
+                "hash": "b1d77749c9bdc4f9a019ed20f587f2558a637302f4acdcd0d4eb5a061ecf52e9"
+              },
+              {
+                "side": "right",
+                "hash": "8a6c0cb3a850dee4da8b86bcf216a8c72d5097579cfb11f72801e1e2473fcfb8"
+              },
+              {
+                "side": "left",
+                "hash": "707760756110492628273e3675a8f24502d845d43fa449e376b8d9b14428d0b6"
+              },
+              {
+                "side": "left",
+                "hash": "b8b689602f7444f2ec80ac26cf18b89c594af3b8edcfaab474f716c871aaec75"
+              },
+              {
+                "side": "right",
+                "hash": "94aa23d51411e09271a9fadf1e8063fc6b80b6d958cf8bba2fecb4491aebbc5b"
+              }
+            ]
+          }
+        },
+        {
+          "index": 99999,
+          "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000099999",
+          "proof": {
+            "index": 99999,
+            "size": 100000,
+            "path": [
+              {
+                "side": "left",
+                "hash": "647d013f7d83bcaebf842ee915245441bb95a8cd7e5c77ef6f4936052e50df9d"
+              },
+              {
+                "side": "left",
+                "hash": "a3544fae39139be529d463e71dc5ff9003a90a87dd9ffcf164c6a4a1fe8ac0f8"
+              },
+              {
+                "side": "left",
+                "hash": "53b9bfb4854278f207907481075a5b9f60ef8d01b4e64011355d9eef1a462bb1"
+              },
+              {
+                "side": "left",
+                "hash": "cbf9843c456618846c7f124d974e6e5290acf8146d6ea6efb58e31ce018fb28f"
+              },
+              {
+                "side": "left",
+                "hash": "6ddabe1ec9d74bb5ab9bc805f733b47cc92ff7a6ae7a9b15157fd8aa821191b0"
+              },
+              {
+                "side": "left",
+                "hash": "3cd21a988965003dcd80296f47855b2673e08f6962bb0fac3961c4788002fcf8"
+              },
+              {
+                "side": "left",
+                "hash": "d3c47a86314facc8604589cedaabe80ea951fac7346d9d53eb388dc11036cd35"
+              },
+              {
+                "side": "left",
+                "hash": "a6442c156dba00aa57c678943d3131b9dcb3a8e8a501e2d551b85a92572cdaba"
+              },
+              {
+                "side": "left",
+                "hash": "ccbadadb4bc29d546946cc7e3fd48df3eb462be2c040788a497d06ce8a64327e"
+              },
+              {
+                "side": "left",
+                "hash": "2eaa36f147c1d8630b941cb031d65185fae63de8b3397c715764480489b39861"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "mustFail": [
+    {
+      "about": "A valid proof for index 3, presented with a different leaf digest. Must fail.",
+      "root": "sha256:fa9e900031114e5566202dbabe11f74aa27a8ba952c6a95bc0783ea550d2d9c7",
+      "leaf": "sha256:0000000000000000000000000000000000000000000000000000000000000005",
+      "proof": {
+        "index": 3,
+        "size": 8,
+        "path": [
+          {
+            "side": "left",
+            "hash": "1f780736e04ee32416544a9554769713a2ce0dd8129f4faf6929f12a5585a7e4"
+          },
+          {
+            "side": "left",
+            "hash": "6eef0755f567d06aa15613fce02352ee0087778f058e817f0bf124021f5e2974"
+          },
+          {
+            "side": "right",
+            "hash": "ad6dfdadd755bf974683fa9cf6c0cfb80eac3e2d594b8ce49cc19e9fd988f9a5"
+          }
+        ]
+      }
+    }
+  ]
+}

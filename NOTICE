@@ -1,0 +1,38 @@
+hpx-verifier
+Copyright 2026 MedXT Holdings Corp.
+
+This product includes software developed by MedXT Holdings Corp.
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+---
+
+Scope of this repository.
+
+This repository contains a verifier for the hpx/1 evidence record format, the
+normative specification for that format, and a set of synthetic conformance
+vectors.
+
+It does not contain, and no licence here extends to, the evidence capture
+adapters, the record production and signing implementation, or any other
+component of the MedXT evidence layer. Those are separate works, are not
+published, and remain proprietary to MedXT Holdings Corp.
+
+---
+
+The conformance vectors in conformance/ are synthetic. They contain no real
+beneficiary, provider, encounter or claim. Identifiers appearing in them are
+invented and are not assigned to any person or organisation.
+
+---
+
+Third party components.
+
+This software depends on the following, which carry their own licences:
+
+  github.com/cloudflare/circl   BSD 3-Clause
+  golang.org/x/sys              BSD 3-Clause
+
+The root package of this repository depends only on the Go standard library.
+The dependencies above are used solely by the mldsa package for ML-DSA-65
+signature verification.

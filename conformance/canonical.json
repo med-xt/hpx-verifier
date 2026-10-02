@@ -1,0 +1,328 @@
+{
+  "about": "Canonical encoding vectors. canonicalize(hydrate(input)) must equal expected, byte for byte.",
+  "omitSentinel": "<<omit>>",
+  "omitMeaning": "A value equal to the sentinel means the key is absent, not null. Absence and null produce different digests.",
+  "cases": [
+    {
+      "name": "empty object",
+      "input": {},
+      "expected": "{}",
+      "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "name": "empty array",
+      "input": [],
+      "expected": "[]",
+      "digest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "name": "null is a value and is kept",
+      "input": {
+        "a": null
+      },
+      "expected": "{\"a\":null}",
+      "digest": "sha256:d091f9c83c091f79652fe8786375b3fe4ce0861a56f5bfbafedbe431877ff0e8"
+    },
+    {
+      "name": "keys sort ascending",
+      "input": {
+        "c": 3,
+        "a": 1,
+        "b": 2
+      },
+      "expected": "{\"a\":1,\"b\":2,\"c\":3}",
+      "digest": "sha256:e6a3385fb77c287a712e7f406a451727f0625041823ecf23bea7ef39b2e39805"
+    },
+    {
+      "name": "uppercase sorts before lowercase",
+      "input": {
+        "a": 1,
+        "Z": 2,
+        "A": 3,
+        "z": 4
+      },
+      "expected": "{\"A\":3,\"Z\":2,\"a\":1,\"z\":4}",
+      "digest": "sha256:2681e235bd257683adf53ec4cf8e88eeca2ce1730ab3687292ee81a1984b35ca"
+    },
+    {
+      "name": "digits sort before letters",
+      "input": {
+        "1": 2,
+        "b": 1,
+        "A": 3,
+        "_": 4
+      },
+      "expected": "{\"1\":2,\"A\":3,\"_\":4,\"b\":1}",
+      "digest": "sha256:5ef24e70ffdfdaf8ea849ca88b1f40db0013d2c4ffa62a2e814a6f4276d105b3"
+    },
+    {
+      "name": "nested objects sort at every level",
+      "input": {
+        "b": {
+          "d": 1,
+          "c": 2
+        },
+        "a": {
+          "f": 3,
+          "e": 4
+        }
+      },
+      "expected": "{\"a\":{\"e\":4,\"f\":3},\"b\":{\"c\":2,\"d\":1}}",
+      "digest": "sha256:60e927ed241e79c792b5c68cacb159b6b81532bce1ebd0eaa6d5354d880b1a6a"
+    },
+    {
+      "name": "absent key is omitted",
+      "input": {
+        "a": 1,
+        "b": "<<omit>>",
+        "c": 3
+      },
+      "expected": "{\"a\":1,\"c\":3}",
+      "digest": "sha256:ea89132f027adb270741ddeea16f07ee9921176fcef0ca74c33493f321b98620"
+    },
+    {
+      "name": "absent inside nested object",
+      "input": {
+        "outer": {
+          "keep": 1,
+          "drop": "<<omit>>"
+        }
+      },
+      "expected": "{\"outer\":{\"keep\":1}}",
+      "digest": "sha256:0bb130c0e1bdac7a939abd122e3bbac395b8a40b781559f6f910f740bbec6360"
+    },
+    {
+      "name": "integer keeps no decimal point",
+      "input": {
+        "n": 1
+      },
+      "expected": "{\"n\":1}",
+      "digest": "sha256:2bfd14f43d17fc7cea24e0917a8879b4b2f880b8baeec1b9d90fbaad655e71bd"
+    },
+    {
+      "name": "float that is integral collapses",
+      "input": {
+        "n": 1
+      },
+      "expected": "{\"n\":1}",
+      "digest": "sha256:2bfd14f43d17fc7cea24e0917a8879b4b2f880b8baeec1b9d90fbaad655e71bd"
+    },
+    {
+      "name": "negative zero serialises as zero",
+      "input": {
+        "n": 0
+      },
+      "expected": "{\"n\":0}",
+      "digest": "sha256:f3013f933b9fb80ab6d995e7ad9da36f683837ba1d81e950c943d40111eac2f0"
+    },
+    {
+      "name": "float keeps needed precision",
+      "input": {
+        "n": 1.5
+      },
+      "expected": "{\"n\":1.5}",
+      "digest": "sha256:cb14d55cfe562fd6592d919f5dfacfa8708687b746a1d110c6dd5529c410e772"
+    },
+    {
+      "name": "long float shortest round trip",
+      "input": {
+        "n": 0.1
+      },
+      "expected": "{\"n\":0.1}",
+      "digest": "sha256:c20c34ed16c837e86b4dcdb33f98c274c9f7da1231f64302082d2cd50743f951"
+    },
+    {
+      "name": "repeating fraction",
+      "input": {
+        "n": 0.3333333333333333
+      },
+      "expected": "{\"n\":0.3333333333333333}",
+      "digest": "sha256:076cc8eb38598fb827e592d382b308b1497022b0069a70fad03485115053ba8e"
+    },
+    {
+      "name": "large integer below exponent threshold",
+      "input": {
+        "n": 100000000000000000000
+      },
+      "expected": "{\"n\":100000000000000000000}",
+      "digest": "sha256:58d2d5b8dd4228ab5775ce84f996718fa19ed49872271e9649b70cebaca26a09"
+    },
+    {
+      "name": "exponent threshold",
+      "input": {
+        "n": 1e+21
+      },
+      "expected": "{\"n\":1e+21}",
+      "digest": "sha256:f1ee2b60ee95a3170fdc07a577e5f3514ced26867443d69da265acadead81007"
+    },
+    {
+      "name": "small exponent",
+      "input": {
+        "n": 1e-7
+      },
+      "expected": "{\"n\":1e-7}",
+      "digest": "sha256:747d6d23b64d1b2d579adb832b44de31c91c875bbef7a8e397f5d183a746b54b"
+    },
+    {
+      "name": "negative number",
+      "input": {
+        "n": -42
+      },
+      "expected": "{\"n\":-42}",
+      "digest": "sha256:fbd5ac2f42479228ed2d3b495816fbda98a9cb9d71d523869a37e784790e9f2c"
+    },
+    {
+      "name": "max safe integer",
+      "input": {
+        "n": 9007199254740991
+      },
+      "expected": "{\"n\":9007199254740991}",
+      "digest": "sha256:e1da48c6a6089f06ecb4e0a2259e658e3786b2420f52baccdf929ec6460d7b41"
+    },
+    {
+      "name": "booleans",
+      "input": {
+        "t": true,
+        "f": false
+      },
+      "expected": "{\"f\":false,\"t\":true}",
+      "digest": "sha256:c22848c47426fcf4d27e55573c22f1d23546315c251e8e4bc384820ba5fae568"
+    },
+    {
+      "name": "quote and backslash escaped",
+      "input": {
+        "s": "he said \"hi\" \\ bye"
+      },
+      "expected": "{\"s\":\"he said \\\"hi\\\" \\\\ bye\"}",
+      "digest": "sha256:f29f025c23c2ff0514720ca0b5e98b20741486e64164c8adb4fa284fad4cd562"
+    },
+    {
+      "name": "control characters",
+      "input": {
+        "s": "tab\there\nnewline"
+      },
+      "expected": "{\"s\":\"tab\\there\\nnewline\"}",
+      "digest": "sha256:0bc8b6cfc9c1f5963784cb275271241fffef8462c1fb8366e71e081cd2e3e972"
+    },
+    {
+      "name": "forward slash is not escaped",
+      "input": {
+        "s": "a/b"
+      },
+      "expected": "{\"s\":\"a/b\"}",
+      "digest": "sha256:9c264114e98db725a30993f561fc16c317f85758d9919128ca9102281570bd83"
+    },
+    {
+      "name": "unicode is not escaped",
+      "input": {
+        "s": "café"
+      },
+      "expected": "{\"s\":\"café\"}",
+      "digest": "sha256:298ebe9dfd0022919780451da01d6ff22cd701ae9f614b77522b751906ac2784"
+    },
+    {
+      "name": "emoji survives as a surrogate pair",
+      "input": {
+        "s": "ok 👍"
+      },
+      "expected": "{\"s\":\"ok 👍\"}",
+      "digest": "sha256:effd189245f6df39a10fda3bba0c3d9a1caf2184ade38182f82fc0be12efa675"
+    },
+    {
+      "name": "non-ascii keys sort by code unit",
+      "input": {
+        "é": 1,
+        "e": 2,
+        "z": 3
+      },
+      "expected": "{\"e\":2,\"z\":3,\"é\":1}",
+      "digest": "sha256:9fd95198b233351043c9e13cbc336297f31bc76a19d0ca2ff093cd1172fa47a1"
+    },
+    {
+      "name": "array order is meaning and is preserved",
+      "input": {
+        "a": [
+          3,
+          1,
+          2
+        ]
+      },
+      "expected": "{\"a\":[3,1,2]}",
+      "digest": "sha256:d934227f5a9f29b31bd6a8ceed3213dd498a07ce32bdfa9ae2488de0c0ab68f1"
+    },
+    {
+      "name": "array of objects",
+      "input": {
+        "a": [
+          {
+            "b": 1,
+            "a": 2
+          },
+          {
+            "d": 3,
+            "c": 4
+          }
+        ]
+      },
+      "expected": "{\"a\":[{\"a\":2,\"b\":1},{\"c\":4,\"d\":3}]}",
+      "digest": "sha256:e51c6865dec8795878ca0cb90b901358ad44b1075b29fbeaa68783b682e4b8fd"
+    },
+    {
+      "name": "deeply nested",
+      "input": {
+        "a": {
+          "b": {
+            "c": {
+              "d": [
+                1,
+                {
+                  "f": 1,
+                  "e": 2
+                }
+              ]
+            }
+          }
+        }
+      },
+      "expected": "{\"a\":{\"b\":{\"c\":{\"d\":[1,{\"e\":2,\"f\":1}]}}}}",
+      "digest": "sha256:d88b0cc75c01efbd3fd54735a6e65232f4015f0b676b3014798d7c25bf4fdfa1"
+    },
+    {
+      "name": "record payload shape",
+      "input": {
+        "spec": "hpx/1",
+        "type": "order.proof",
+        "episode": "ep_0001",
+        "seq": 2,
+        "prev": "sha256:aa",
+        "subject": {
+          "scheme": "mbi-pseudonym",
+          "id": "p_01"
+        },
+        "actor": {
+          "scheme": "npi",
+          "id": "1275551103"
+        },
+        "assertion": {
+          "signedAtPointOfOrder": true,
+          "orderCount": 1
+        },
+        "evidence": [
+          {
+            "alg": "sha256",
+            "digest": "sha256:bb",
+            "descriptor": "plan of care"
+          }
+        ],
+        "time": "2026-09-11T19:40:00.000Z",
+        "key": {
+          "id": "k-clin-004",
+          "version": 1,
+          "alg": "ML-DSA-65"
+        }
+      },
+      "expected": "{\"actor\":{\"id\":\"1275551103\",\"scheme\":\"npi\"},\"assertion\":{\"orderCount\":1,\"signedAtPointOfOrder\":true},\"episode\":\"ep_0001\",\"evidence\":[{\"alg\":\"sha256\",\"descriptor\":\"plan of care\",\"digest\":\"sha256:bb\"}],\"key\":{\"alg\":\"ML-DSA-65\",\"id\":\"k-clin-004\",\"version\":1},\"prev\":\"sha256:aa\",\"seq\":2,\"spec\":\"hpx/1\",\"subject\":{\"id\":\"p_01\",\"scheme\":\"mbi-pseudonym\"},\"time\":\"2026-09-11T19:40:00.000Z\",\"type\":\"order.proof\"}",
+      "digest": "sha256:cb4b5265f46819cee03d263df61fa1762585d468769f8419058ec229bec0bfd3"
+    }
+  ]
+}

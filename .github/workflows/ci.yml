@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+      - name: Reproduce every published conformance vector
+        run: go test ./...
+      - name: Vet
+        run: go vet ./...
+      # The structural checks must keep working with no dependency at all. That
+      # is what lets an auditor run them on a locked down machine, and it is the
+      # property that makes the cryptographic provider swappable.
+      - name: Root package depends only on the standard library
+        run: |
+          deps=$(go list -deps . | grep -v '^internal/' | grep '\.' || true)
+          if [ -n "$deps" ]; then
+            echo "root package gained an external dependency:"; echo "$deps"; exit 1
+          fi
+      - name: Build the verifier
+        run: go build -o /tmp/verify ./cmd/verify
+      - name: It verifies the valid bundle
+        run: /tmp/verify --bundle conformance/bundle-valid.json --keys conformance/keys.json
+      - name: It rejects a tampered bundle
+        run: |
+          sed 's/"nights": 3/"nights": 2/' conformance/bundle-valid.json > /tmp/tampered.json
+          if /tmp/verify --bundle /tmp/tampered.json --keys conformance/keys.json; then
+            echo "tampered bundle was accepted"; exit 1
+          fi
