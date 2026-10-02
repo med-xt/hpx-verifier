@@ -20,12 +20,23 @@ jobs:
       # The structural checks must keep working with no dependency at all. That
       # is what lets an auditor run them on a locked down machine, and it is the
       # property that makes the cryptographic provider swappable.
+      #
+      # Ask Go which packages are standard rather than guessing from the import
+      # path. The first version of this grepped for a dot in the path, on the
+      # reasoning that a dot means a domain means an external module. It was
+      # wrong twice and had never passed: `crypto/internal/entropy/v1.0.0` is
+      # standard library with a version segment in its path, and `go list -deps`
+      # includes the package being listed, so the module flagged itself. A gate
+      # that cannot pass is not a gate, and this one sat red from the first
+      # commit while asserting the property it was meant to protect.
       - name: Root package depends only on the standard library
         run: |
-          deps=$(go list -deps . | grep -v '^internal/' | grep '\.' || true)
+          deps=$(go list -deps -f '{{if not .Standard}}{{.ImportPath}}{{end}}' . \
+                 | grep -v '^github.com/med-xt/hpx-verifier' || true)
           if [ -n "$deps" ]; then
             echo "root package gained an external dependency:"; echo "$deps"; exit 1
           fi
+          echo "root package imports nothing outside the standard library"
       - name: Build the verifier
         run: go build -o /tmp/verify ./cmd/verify
       - name: It verifies the valid bundle
