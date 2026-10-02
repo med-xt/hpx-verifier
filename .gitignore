@@ -1,4 +1,10 @@
-verify
+# The compiled binary, which is built from source rather than committed.
+#
+# This was previously a bare `verify`, with no leading slash. A bare pattern in
+# a gitignore matches a file OR A DIRECTORY of that name at any depth, so it
+# silently excluded cmd/verify/ and the repository never contained the program
+# its own README tells people to build. Anchor it, so it means the binary at the
+# repository root and nothing else.
 /verify
 bin/
 *.exe
