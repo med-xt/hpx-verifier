@@ -1,6 +1,13 @@
 # hpx-verifier
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23107483.svg)](https://doi.org/10.5281/zenodo.23107483)
+
 An independent, offline verifier for `hpx/1` evidence records.
+
+The format this tool verifies is specified in *A Doctrine of Verifiable Evidence
+for United States Healthcare Payment*, https://doi.org/10.5281/zenodo.23107483. Part V of that document is
+the normative specification; this repository is one of the two implementations it
+describes.
 
 It makes no network call, needs no service, no account and no licence check, and
 it does not care whether the organisation that produced the records still
@@ -224,6 +231,19 @@ That boundary is deliberate and it does not weaken anything here. Verifying a
 checkpoint needs no part of the thing that made it, which is the same reason
 verifying a record needs no part of the signing path.
 
+## Citing this work
+
+The specification:
+
+> A Doctrine of Verifiable Evidence for United States Healthcare Payment. Version 1.0, October 2026. https://doi.org/10.5281/zenodo.23107483
+
+The verifier: cite this repository and the commit you built, since the published
+conformance vectors are versioned with it.
+
 ## Licence
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+The licence covers the verifier software in this repository. The specification and
+the conformance vectors are published for implementation, and publication grants no
+patent or trade mark licence by implication or estoppel.

@@ -1,6 +1,12 @@
 # Proof Record Format, `hpx/1`
 
-Version 1. Draft. Frozen once a second implementation exists.
+Version 1. Frozen: two independent implementations agree on the published
+conformance vectors.
+
+This document is the normative wire format. It is Part V of *A Doctrine of
+Verifiable Evidence for United States Healthcare Payment*, https://doi.org/10.5281/zenodo.23107483, which
+carries the reasoning behind every requirement here. Where this file and that
+document differ, that document governs.
 
 This is the wire format. Two systems that have never communicated must produce
 byte-identical output for identical facts, or signatures will not verify across an
