@@ -194,6 +194,21 @@ Zero and one are about the evidence. Two is about the tool. A verifier that
 returns "failed" when it merely could not read a file has told a reviewer the
 evidence is bad when the truth is that the tool is broken.
 
+## A demonstration you can run
+
+`demo/` holds three synthetic post-acute episodes with real cryptography: one
+complete, one missing a required document, and one with a field altered after
+signing. The first two verify, the third does not, and `demo/README.md` shows the
+commands and the expected exit codes.
+
+```
+./verify --bundle demo/1-complete.json    # exit 0
+./verify --bundle demo/3-altered.json     # exit 1, names the record and the check
+```
+
+`demo/INTEGRATION.md` is for anyone building a screen that shows an evidence
+status beside another vendor's finding.
+
 ## Running the tests
 
 ```
