@@ -29,7 +29,7 @@ VERIFIES  5 records, episode ep_demo_complete_0001
           chain intact, every record links to its predecessor
           every record included under the published log root
           every signature verifies over the canonical payload
-          log root published at size 15, checkpoint signed by 2 key(s)
+          log root published at size 14, checkpoint signed by 2 key(s)
 ```
 
 Exit code 0.
@@ -66,8 +66,8 @@ episode looked like a tampered one.
 ```
 DOES NOT VERIFY  5 records, 2 problems
 
-  record 0 (discharge.proof): DIGEST_MISMATCH: envelope says sha256:77f6fc37…,
-                              payload hashes to sha256:…
+  record 0 (discharge.proof): DIGEST_MISMATCH: envelope says sha256:09f5780a139…,
+                              payload hashes to sha256:786a9a2c…
   record 0 (discharge.proof): SIG_INVALID: signature does not verify over the
                               canonical payload
 ```
@@ -82,14 +82,14 @@ failure is what matters here.
 
 ## The checkpoint
 
-`checkpoint.txt` is the signed statement that the log held 15 records with the
+`checkpoint.txt` is the signed statement that the log held 14 records with the
 published root at a given moment, carrying two signatures: the log's own, and an
 independent witness that verified continuity before co-signing.
 
 ```
 hpx/checkpoint/1
 medxt-evidence/demo
-15
+14
 sha256:b14260755766240f824b2c070e535c78d0e56b9b39ac2b82a1ee9d8fdbeaed93
 2026-11-07T09:00:00.000Z
 ```
