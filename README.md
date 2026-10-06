@@ -207,7 +207,9 @@ commands and the expected exit codes.
 ```
 
 `demo/INTEGRATION.md` is for anyone building a screen that shows an evidence
-status beside another vendor's finding.
+status beside another vendor's finding. [`spec/api.md`](spec/api.md) is the
+integration contract: the endpoints, every response field, the reason codes and
+the fail open semantics a client has to implement.
 
 ## Running the tests
 
