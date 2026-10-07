@@ -89,6 +89,34 @@ Content-Type: application/json
 the property that matters. Evidence assembled afterward is the thing this layer
 exists to replace.
 
+### 1.3 Resolving the evidence, an open design decision
+
+The call above takes a bundle in the request body. That suits a party who already
+holds the evidence: a provider answering an audit, or a reviewer handed a file.
+
+A claim intelligence or adjudication system does not hold bundles. It holds a
+claim and an episode reference. For that caller the request has to carry a
+reference and the service has to resolve it.
+
+Both forms are intended to be supported, and the trade between them is not
+settled:
+
+**Reference in.** The caller sends an episode or claim reference and the service
+resolves it against the store. Simple for the caller. It requires the service to
+hold state, to authenticate the caller, and it means the caller's request pattern
+discloses which claims it is examining.
+
+**Bundle in.** Whoever holds the evidence sends it. The service holds nothing and
+learns nothing about what the caller is looking at, which is the cleaner trust
+position. It moves the retrieval problem to the caller.
+
+The current implementation accepts a bundle. Reference resolution, and the
+authentication and disclosure questions that come with it, are open and are being
+settled with the first integration partners rather than decided unilaterally.
+
+A client should expect the response shape in 1.1 to be identical either way. Only
+the request differs.
+
 ---
 
 ## 2. Status, and why it is a separate field
