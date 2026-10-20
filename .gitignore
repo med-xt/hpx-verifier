@@ -9,3 +9,15 @@
 bin/
 *.exe
 .DS_Store
+
+# Python bytecode. Written automatically the first time check_vectors.py
+# imports hpx, so it appears without anyone asking for it and `git add python`
+# picks it up. Two .pyc files reached a published commit that way.
+#
+# They matter more here than in most repositories. This one asks a reviewer to
+# read the source and check that it does what it claims, so a compiled artifact
+# nobody can read, committed beside the source it was built from, is noise in
+# exactly the place the repository is making a point about transparency. The
+# source is the deliverable.
+__pycache__/
+*.py[cod]
