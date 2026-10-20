@@ -102,6 +102,59 @@ signature is the one that matters.
          --log-key k-log-001 --witnesses 1
 ```
 
+## When the operator is the adversary
+
+Every signature above protects a record against anyone who does not hold a key.
+None of them protects against the party running the log, who holds the real key
+and can sign anything.
+
+Four more files cover that case. They are three checkpoints over the same log as
+it grew, plus a fourth over a log rebuilt without one record and signed with the
+same genuine key.
+
+| File | Size | Signatures |
+|---|---|---|
+| `checkpoint-monday.txt` | 5 | log and witness |
+| `checkpoint-tuesday.txt` | 14 | log and witness |
+| `checkpoint-rewritten.txt` | 13 | log only |
+
+`proof-monday-to-tuesday.json` is the RFC 6962 consistency proof for the honest
+growth, five hashes long. `proof-rewritten.json` is an empty array, because no
+proof exists for the rewrite and none can be constructed.
+
+**Honest growth. The log of 14 contains the log of 5, unchanged.**
+
+```
+./verify --checkpoint demo/checkpoint-tuesday.txt \
+         --against    demo/checkpoint-monday.txt \
+         --proof      demo/proof-monday-to-tuesday.json \
+         --keys       demo/keys.json
+```
+
+**The rewrite. The same key, a valid signature, and no continuity.**
+
+```
+./verify --checkpoint demo/checkpoint-rewritten.txt \
+         --against    demo/checkpoint-tuesday.txt \
+         --proof      demo/proof-rewritten.json \
+         --keys       demo/keys.json
+```
+
+The second command fails on the size, because a log that shrank from 14 to 13 is
+not an append only log whatever it is signed with. Had the operator rebuilt at
+the same size or larger, the proof check would have failed instead. Either way
+the witness refuses to co-sign, which is why the rewritten checkpoint carries one
+signature and the honest ones carry two.
+
+The property worth noticing is that a reviewer holding only these text files
+reaches the same conclusion, offline, with no access to the log and no
+cooperation from whoever runs it.
+
+No independent witness is in operation today. The witness here is a second key
+held by the same generator, which demonstrates the protocol and does not
+demonstrate independence. Until a party outside MedXT holds a co-signing key,
+the system is not described as independently anchored.
+
 ## What the three outcomes are called
 
 The three episodes correspond to the three dispositions the output contract

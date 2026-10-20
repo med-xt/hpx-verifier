@@ -1,0 +1,108 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>hpx verifier, running in your browser</title>
+<style>
+  body { font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 920px; margin: 40px auto; padding: 0 20px; color: #1b3a5c; }
+  h1 { font-size: 1.5rem; margin: 0 0 6px; color: #0e2944; }
+  .sub { color: #5c7d9a; margin: 0 0 28px; }
+  button { font: inherit; padding: 9px 16px; margin: 0 8px 8px 0; cursor: pointer;
+           border: 1px solid #2e7fb8; background: #fff; color: #2e7fb8; border-radius: 5px; }
+  button:hover:not(:disabled) { background: #2e7fb8; color: #fff; }
+  button:disabled { opacity: .4; cursor: default; }
+  pre { background: #0a1e33; color: #c6dcee; padding: 18px; border-radius: 6px;
+        overflow-x: auto; font: 12.5px/1.65 ui-monospace, Menlo, Consolas, monospace; }
+  .ok { color: #4ade80; } .bad { color: #f87171; } .dim { color: #5c7d9a; }
+  #status { font-size: .9rem; color: #5c7d9a; margin-bottom: 18px; }
+</style>
+
+<h1>The verifier, running in your browser</h1>
+<p class="sub">Real cryptography, executing on this machine. Nothing is sent anywhere, and there is no server involved.</p>
+
+<div id="status">Loading the verifier...</div>
+
+<div>
+  <button id="b1" disabled>Verify a complete episode</button>
+  <button id="b2" disabled>Verify one with a missing document</button>
+  <button id="b3" disabled>Verify one that was altered</button>
+  <button id="b4" disabled>Alter a field right now</button>
+</div>
+
+<pre id="out">Waiting.</pre>
+
+<script src="wasm_exec.js"></script>
+<script>
+const out = document.getElementById('out');
+const status = document.getElementById('status');
+const buttons = ['b1','b2','b3','b4'].map(id => document.getElementById(id));
+
+function show(html) { out.innerHTML = html; }
+function esc(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+function render(r) {
+  if (!r.ran) return show('<span class="bad">could not run</span>\n' + esc(r.problems.join('\n')));
+  const head = r.ok
+    ? `<span class="ok">VERIFIES</span>  ${r.count} records, episode ${esc(r.episode)}`
+    : `<span class="bad">DOES NOT VERIFY</span>  ${r.count} records, ${r.problems.length} problems`;
+
+  let body = '\n';
+  for (const rec of r.records) {
+    const mark = rec.ok ? '<span class="ok">ok  </span>' : '<span class="bad">FAIL</span>';
+    body += `  ${mark}  ${String(rec.index).padEnd(2)} ${esc(rec.type).padEnd(18)} `
+          + `<span class="dim">${esc(rec.digest.slice(0, 26))}...</span>\n`;
+    for (const p of rec.problems) body += `          <span class="bad">${esc(p.code)}</span>: ${esc(p.detail)}\n`;
+  }
+
+  const a = r.anchoring;
+  body += '\n';
+  body += a.present
+    ? `  <span class="dim">checkpoint: size ${a.size}, ${a.signedBy.length} signature(s) `
+      + `${a.verified ? '<span class="ok">verified</span>' : '<span class="bad">not verified</span>'}</span>\n`
+    : '  <span class="dim">no checkpoint supplied, the log history was not checked</span>\n';
+
+  show(head + body);
+}
+
+async function load(name) {
+  const r = await fetch('../demo/' + name);
+  if (!r.ok) throw new Error('cannot read demo/' + name + ' (' + r.status + ')');
+  return r.text();
+}
+
+async function run(file) {
+  show('running...');
+  try { render(hpxVerifyBundle(await load(file))); }
+  catch (e) { show('<span class="bad">' + esc(e.message) + '</span>'); }
+}
+
+// Alter a field in a good bundle, in the browser, and verify the result.
+async function alterAndVerify() {
+  show('altering one field, then verifying...');
+  try {
+    const b = JSON.parse(await load('1-complete.json'));
+    const before = JSON.stringify(b.records[0].payload.assertion);
+    b.records[0].payload.assertion.nights = 2;
+    const r = hpxVerifyBundle(JSON.stringify(b));
+    render(r);
+    out.innerHTML += `\n  <span class="dim">changed record 0: ${esc(before)}</span>\n`
+                   + `  <span class="dim">           to: ${esc(JSON.stringify(b.records[0].payload.assertion))}</span>`;
+  } catch (e) { show('<span class="bad">' + esc(e.message) + '</span>'); }
+}
+
+window.hpxReady = function () {
+  const v = hpxVersion();
+  status.textContent = 'Verifier loaded. ' + v.spec + ', ' + v.note;
+  buttons.forEach(b => b.disabled = false);
+  show('Ready. Pick one.');
+};
+
+document.getElementById('b1').onclick = () => run('1-complete.json');
+document.getElementById('b2').onclick = () => run('2-incomplete.json');
+document.getElementById('b3').onclick = () => run('3-altered.json');
+document.getElementById('b4').onclick = alterAndVerify;
+
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch('verify.wasm'), go.importObject)
+  .then(res => go.run(res.instance))
+  .catch(e => { status.textContent = 'Failed to load the verifier: ' + e.message; show('<span class="bad">' + esc(e.message) + '</span>'); });
+</script>
