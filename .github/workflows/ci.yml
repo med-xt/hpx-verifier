@@ -1,5 +1,20 @@
 name: ci
 
+# The runner image is pinned rather than tracking ubuntu-latest, and the
+# actions are on the majors that run Node 24.
+#
+# ubuntu-latest began migrating to Ubuntu 26 on 19 October 2026, which means a
+# repository using it gets a different operating system underneath its build
+# without any commit having changed. For most projects that is a minor
+# annoyance. For this one it undercuts the claim being made: a verifier whose
+# whole argument is that an auditor can reproduce the result should not have a
+# moving floor. Pinning costs a periodic bump and buys a build that is the same
+# build next month.
+#
+# The action versions are the minimum majors that run on Node 24, after Node 20
+# was removed from the runners. Each requires runner v2.327.1 or newer, which
+# GitHub hosted runners satisfy.
+
 on:
   push:
     branches: [main]
@@ -7,10 +22,10 @@ on:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: 'stable'
       - name: Reproduce every published conformance vector
@@ -63,10 +78,10 @@ jobs:
   # must never be one: a reviewer with nothing but a Python interpreter being
   # able to check the published vectors is the property this job protects.
   third-implementation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
       - name: Python agrees with every published vector
