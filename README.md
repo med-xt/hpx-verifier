@@ -211,6 +211,32 @@ status beside another vendor's finding. [`spec/api.md`](spec/api.md) is the
 integration contract: the endpoints, every response field, the reason codes and
 the fail open semantics a client has to implement.
 
+## The same verifier, in a browser
+
+`web/` holds this verifier compiled to WebAssembly, and it is the same Go code
+in this repository, not a reimplementation in JavaScript. A page using it does
+real cryptography locally. Nothing is uploaded, there is no server to trust, and
+if you save the page to disk it keeps working.
+
+```
+GOOS=js GOARCH=wasm go build -o web/verify.wasm ./cmd/wasm
+cp "$(go env GOROOT)/lib/wasm/wasm_exec.js" web/
+```
+
+Then serve `web/` over HTTP and open it. A `file://` URL will not work, because
+browsers refuse to instantiate WebAssembly from one.
+
+The page computes a SHA-256 of the exact bytes of the module it loaded and
+displays it, so the binary that ran can be identified rather than assumed. A
+running copy is at [medxt.us/verify](https://medxt.us/verify), and
+`web/verify.wasm` in this repository is byte-identical to the module that page
+serves: hash the file and compare it against what the page shows.
+
+Go builds are not byte-reproducible across toolchain versions, so a module you
+build yourself will hash differently from the committed one. That is expected,
+and it is why the page reports the hash of what it actually loaded instead of a
+figure written into the HTML.
+
 ## Running the tests
 
 ```
@@ -240,9 +266,10 @@ the operator cannot reissue.
 
 ## What is not here
 
-This repository contains a verifier. It does not contain the capture adapters,
-the signing path, the witness implementation, or anything that produces records
-or checkpoints. Those are separate and are not published.
+This repository contains a verifier, as a command line tool and as a
+WebAssembly module. It does not contain the capture adapters, the signing path,
+the witness implementation, or anything that produces records or checkpoints.
+Those are separate and are not published.
 
 That boundary is deliberate and it does not weaken anything here. Verifying a
 checkpoint needs no part of the thing that made it, which is the same reason
