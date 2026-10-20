@@ -237,10 +237,40 @@ build yourself will hash differently from the committed one. That is expected,
 and it is why the page reports the hash of what it actually loaded instead of a
 figure written into the HTML.
 
+## A third implementation, in Python
+
+Two implementations written by the same people in the same month can share a
+misreading and agree with each other all the way into production. So there is a
+third, in `python/`, written from `spec/record-format.md` and from RFC 6962
+rather than from the Go.
+
+```
+python3 python/check_vectors.py
+```
+
+86 checks, standard library only. No `pip install`, no virtualenv, no network,
+and CI fails if an import outside the standard library ever appears. A reviewer
+with nothing but a Python interpreter can confirm the published vectors are
+what they claim to be.
+
+It covers the canonical encoding and the Merkle construction, which is
+everything a digest or a proof depends on. It does not verify signatures,
+because ML-DSA-65 is not in the Python standard library and a dependency would
+cost the property above.
+
+Writing it found two gaps in what was published here, which is the entire
+return on the exercise. Section 7 did not say whether an interior node hashes
+the raw 32 byte child hashes or the `sha256:`-prefixed hex strings, and the
+more natural reading of the text was the wrong one. And `conformance/merkle.json`
+never stated that its synthetic leaves use the index in decimal rather than
+hex, a difference invisible in every tree it publishes except the largest. Both
+are now written down. [`python/README.md`](python/README.md) has the detail.
+
 ## Running the tests
 
 ```
 go test ./...
+python3 python/check_vectors.py
 ```
 
 That reproduces every published vector: 31 canonical encoding cases, Merkle

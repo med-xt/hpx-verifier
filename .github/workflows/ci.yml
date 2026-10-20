@@ -47,3 +47,54 @@ jobs:
           if /tmp/verify --bundle /tmp/tampered.json --keys conformance/keys.json; then
             echo "tampered bundle was accepted"; exit 1
           fi
+      # The WebAssembly build cannot be compiled or tested for this runner's
+      # platform, because syscall/js exists only for GOOS=js. Building it for
+      # its real target is the only way to know the module the site runs still
+      # compiles, and its source is published here for people to build.
+      - name: The WebAssembly module builds
+        run: GOOS=js GOARCH=wasm go build -o /tmp/verify.wasm ./cmd/wasm
+
+  # A third implementation, in a different language, written from the
+  # specification rather than from the Go. Two implementations by the same
+  # people in the same month can share a misreading and agree with each other
+  # all the way into production; this is the gate that would catch that.
+  #
+  # Standard library only, deliberately. No pip install step here, and there
+  # must never be one: a reviewer with nothing but a Python interpreter being
+  # able to check the published vectors is the property this job protects.
+  third-implementation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Python agrees with every published vector
+        run: python3 python/check_vectors.py
+      # Parsed with ast, not grepped. The first version of this gate was a
+      # regex for lines beginning with import or from, and it flagged a
+      # docstring sentence that began "from two roots that describe...". It
+      # would have sat red from the first commit while asserting a property it
+      # was not testing, which is finding 2.11 in this project's own security
+      # review, for the fourth time. A language's own parser knows what an
+      # import is and prose cannot fool it.
+      - name: It has no third party imports
+        run: |
+          python3 - <<'EOF'
+          import ast, pathlib, sys
+          allowed = {'hashlib', 'math', 'decimal', 'json', 'os', 'sys', 'hpx'}
+          found = set()
+          for path in sorted(pathlib.Path('python').glob('*.py')):
+              tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+              for node in ast.walk(tree):
+                  if isinstance(node, ast.Import):
+                      found.update(a.name.split('.')[0] for a in node.names)
+                  elif isinstance(node, ast.ImportFrom) and node.module:
+                      found.add(node.module.split('.')[0])
+          extra = sorted(found - allowed)
+          if extra:
+              print('the python implementation gained an import outside the '
+                    'standard library:', ', '.join(extra))
+              sys.exit(1)
+          print('standard library only:', ', '.join(sorted(found)))
+          EOF

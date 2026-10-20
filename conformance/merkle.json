@@ -1,5 +1,7 @@
 {
-  "about": "RFC 6962 Merkle vectors. Leaf is SHA-256(0x00 || ascii digest string). Node is SHA-256(0x01 || left || right). Split for n leaves is 2^ceil(log2(n) - 1). Empty tree is SHA-256 of the empty string.",
+  "about": "RFC 6962 Merkle vectors. Leaf is SHA-256(0x00 || ascii digest string, prefix included). Node is SHA-256(0x01 || left || right) over the raw 32 byte hashes, not the prefixed hex strings. Split for n leaves is 2^ceil(log2(n) - 1), computed in integers. Empty tree is SHA-256 of the empty string.",
+  "leafPattern": "\"sha256:\" + String(index).padStart(64, \"0\")",
+  "leafPatternNote": "The index in DECIMAL, left padded with zeros to 64 characters. Not hex, even though every digest elsewhere in the format is hex.",
   "emptyTreeRoot": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "trees": [
     {

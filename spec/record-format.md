@@ -121,8 +121,19 @@ It exists so a reviewer knows what to ask the custodian for.
 
 RFC 6962 structure.
 
-- Leaf hash: `SHA-256(0x00 || record.digest)` over the ASCII digest string.
-- Interior node: `SHA-256(0x01 || left || right)`.
+- Leaf hash: `SHA-256(0x00 || record.digest)` over the ASCII digest string,
+  prefix included. The input is the 71 bytes of `sha256:` followed by 64 hex
+  characters, not the 32 bytes the hex decodes to.
+- Interior node: `SHA-256(0x01 || left || right)`, where `left` and `right` are
+  the **raw 32 byte hashes**, not the `sha256:`-prefixed hex strings.
+
+  This sentence used to say only `SHA-256(0x01 || left || right)`. A third
+  implementation, written from this document, read the children as prefixed hex
+  strings, which is the more natural inference given that the line above
+  explicitly hashes the ASCII digest string. The two readings produce entirely
+  different roots, and the disagreement presents as tampering rather than as a
+  misreading of the specification. The leaf is a string and the node is bytes,
+  and that asymmetry has to be stated because nothing else implies it.
 - Split point for a list of `n` leaves is the largest power of two strictly less
   than `n`. This is `2^ceil(log2(n) - 1)`, and it must be computed in integers.
   Evaluated in floating point, `log2` can land a fraction either side of the
