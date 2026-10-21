@@ -237,6 +237,40 @@ build yourself will hash differently from the committed one. That is expected,
 and it is why the page reports the hash of what it actually loaded instead of a
 figure written into the HTML.
 
+## Running a witness
+
+`witness/` is a witness you can run against an hpx/1 log.
+
+A checkpoint signed only by the log proves nothing about the log. Whoever
+operates it holds the key, so they can rebuild history without one record and
+sign a checkpoint for the rebuilt version, and anyone holding only that
+checkpoint cannot tell. A witness keeps its own record of what it last
+endorsed, and co-signs a new checkpoint only after being shown that the new
+tree grew from the one it already holds. If it was not, it refuses, and the
+refusal is the point.
+
+```
+cd witness
+npm install
+node test-witness.js
+```
+
+Forty six checks, running a log and a witness as two separate parties with two
+separate keys, including a log rewriting its history and being refused over
+HTTP.
+
+It is published for one reason. If you are asked to run a witness and vouch
+that somebody else's log cannot be quietly rewritten, you should be able to
+read what you are running. A witness nobody can inspect is not independent in
+any sense that survives a question from your own counsel.
+
+What it sees is an origin, a count, a hash and a time. There is no patient, no
+provider, no diagnosis and no money in anything a witness receives.
+[`witness/OPERATING.md`](witness/OPERATING.md) is written for the organisation
+operating one rather than for the log operator, and states what running one
+actually commits you to, what it refuses to do, and the limits of what a
+journal on a single machine can prove.
+
 ## A third implementation, in Python
 
 Two implementations written by the same people in the same month can share a

@@ -10,6 +10,15 @@ bin/
 *.exe
 .DS_Store
 
+# Node dependencies for the witness. Installed with npm, never committed.
+#
+# No trailing slash, deliberately. `node_modules/` matches a directory and
+# does NOT match a symlink of that name, and a symlink is exactly what you get
+# when someone points the witness at an already installed tree while testing.
+# Written with the slash first, this file would have published a link to a
+# path on one developer's laptop.
+node_modules
+
 # Python bytecode. Written automatically the first time check_vectors.py
 # imports hpx, so it appears without anyone asking for it and `git add python`
 # picks it up. Two .pyc files reached a published commit that way.

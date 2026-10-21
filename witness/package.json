@@ -1,0 +1,15 @@
+{
+  "name": "hpx-witness",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "A witness for an hpx/1 evidence log. Co-signs a log's checkpoints only after proving the new tree grew from the one it already endorsed, refuses otherwise, and publishes both.",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node test-witness.js"
+  },
+  "dependencies": {
+    "@noble/post-quantum": "^0.7.1",
+    "@noble/hashes": "^2.4.0"
+  }
+}
